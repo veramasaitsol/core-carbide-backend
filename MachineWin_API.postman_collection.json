@@ -1,0 +1,606 @@
+{
+  "info": {
+    "name": "MachineWin API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Complete API collection for MachineWin PHP backend. Base URL: http://localhost/machinewin_php"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost/machinewin_php",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var res = pm.response.json();",
+                  "if (res.token) { pm.collectionVariables.set('token', res.token); }"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"employee_id\": \"EMP001\",\n  \"password\": \"Password@123\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/login", "host": ["{{base_url}}"], "path": ["login"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"plant\": \"Plant A\",\n  \"role\": \"operator\",\n  \"name\": \"John Doe\",\n  \"employee_id\": \"EMP002\",\n  \"password\": \"Password@123\",\n  \"status\": \"active\",\n  \"machine_ids\": [1, 2]\n}"
+            },
+            "url": { "raw": "{{base_url}}/create_user", "host": ["{{base_url}}"], "path": ["create_user"] }
+          }
+        },
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/users", "host": ["{{base_url}}"], "path": ["users"] }
+          }
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/users/1", "host": ["{{base_url}}"], "path": ["users", "1"] }
+          }
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Updated\",\n  \"plant\": \"Plant B\",\n  \"role\": \"operator\",\n  \"status\": \"active\",\n  \"machine_ids\": [1, 3]\n}"
+            },
+            "url": { "raw": "{{base_url}}/users/1", "host": ["{{base_url}}"], "path": ["users", "1"] }
+          }
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/users/1", "host": ["{{base_url}}"], "path": ["users", "1"] }
+          }
+        },
+        {
+          "name": "Reset My Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"old_password\": \"Password@123\",\n  \"new_password\": \"NewPass@456\",\n  \"confirm_new_password\": \"NewPass@456\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/users/me/reset_password", "host": ["{{base_url}}"], "path": ["users", "me", "reset_password"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Machines",
+      "item": [
+        {
+          "name": "Add Machine",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"oem_name\": \"Fanuc Machine 1\",\n  \"ip_address\": \"192.168.1.100\",\n  \"operator_ip\": \"192.168.1.101\",\n  \"port\": \"8193\",\n  \"vfj_no\": \"VFJ-001\",\n  \"control_type\": \"FANUC\",\n  \"control_details\": \"Series 0i-MF\",\n  \"control_model\": \"0i-MF\",\n  \"status\": \"active\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/add_machine", "host": ["{{base_url}}"], "path": ["add_machine"] }
+          }
+        },
+        {
+          "name": "Get All Machines",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/machines", "host": ["{{base_url}}"], "path": ["machines"] }
+          }
+        },
+        {
+          "name": "Get Machine by ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/machines/1", "host": ["{{base_url}}"], "path": ["machines", "1"] }
+          }
+        },
+        {
+          "name": "Update Machine",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"oem_name\": \"Fanuc Machine 1 Updated\",\n  \"ip_address\": \"192.168.1.105\",\n  \"status\": \"active\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/machines/1", "host": ["{{base_url}}"], "path": ["machines", "1"] }
+          }
+        },
+        {
+          "name": "Delete Machine (Soft)",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/machines/1", "host": ["{{base_url}}"], "path": ["machines", "1"] }
+          }
+        },
+        {
+          "name": "Restore Machine",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/machines/1/restore", "host": ["{{base_url}}"], "path": ["machines", "1", "restore"] }
+          }
+        },
+        {
+          "name": "Update Machine Status",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"active\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/machines/1/status", "host": ["{{base_url}}"], "path": ["machines", "1", "status"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Machine Data",
+      "item": [
+        {
+          "name": "Insert Machine Data",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"machine_id\": 1,\n  \"machine_state\": \"RUNNING\",\n  \"machine_mode\": \"AUTO\",\n  \"axis_positions\": { \"X\": 10.5, \"Y\": -5.2, \"Z\": 100.0 },\n  \"actual_spindle_speed\": 1500,\n  \"set_speed\": 1500,\n  \"actual_feed_rate\": 200,\n  \"set_feed_rate\": 200,\n  \"feed_override\": 100,\n  \"speed_override\": 100,\n  \"spindle_load\": 45,\n  \"coolant_status\": \"ON\",\n  \"cycle_time\": \"00:02:30\",\n  \"cutting_time\": \"00:01:45\",\n  \"operate_time\": \"08:00:00\",\n  \"power_on_time\": \"08:30:00\",\n  \"current_tool_number\": 3,\n  \"total_production\": 120,\n  \"main_program_number\": \"O1001\",\n  \"executing_program_number\": \"O1001\",\n  \"sequence_number\": \"N100\",\n  \"emergency_signal\": 0,\n  \"battery_low_alarm\": 0,\n  \"machine_alarms\": [],\n  \"cnc_warnings\": []\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/machine_data", "host": ["{{base_url}}"], "path": ["api", "machine_data"] }
+          }
+        },
+        {
+          "name": "Get Machine Data (Latest)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{base_url}}/machine_data/1",
+              "host": ["{{base_url}}"],
+              "path": ["machine_data", "1"]
+            }
+          }
+        },
+        {
+          "name": "Get Machine Data (Date Range)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{base_url}}/machine_data/1?start_time=2025-01-01 00:00:00&end_time=2025-01-31 23:59:59",
+              "host": ["{{base_url}}"],
+              "path": ["machine_data", "1"],
+              "query": [
+                { "key": "start_time", "value": "2025-01-01 00:00:00" },
+                { "key": "end_time", "value": "2025-01-31 23:59:59" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Live Status",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/api/machines/live-status", "host": ["{{base_url}}"], "path": ["api", "machines", "live-status"] }
+          }
+        },
+        {
+          "name": "Ping Status",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/api/machines/ping-status", "host": ["{{base_url}}"], "path": ["api", "machines", "ping-status"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Production",
+      "item": [
+        {
+          "name": "Add Production Record",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"machine_id\": 1,\n  \"shift_operator_name\": \"Operator A\",\n  \"machine_name\": \"Fanuc Machine 1\",\n  \"machine_no\": \"M001\",\n  \"product_component_name\": \"Component XYZ\",\n  \"product_component_no\": \"COMP-001\",\n  \"section_code_name\": \"SEC-A\",\n  \"shift_production_details\": {\n    \"shift\": \"morning\",\n    \"start\": \"06:00\",\n    \"end\": \"14:00\"\n  },\n  \"machine_status\": \"RUNNING\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/add_production", "host": ["{{base_url}}"], "path": ["add_production"] }
+          }
+        },
+        {
+          "name": "Get Production Records",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{base_url}}/get_production?machine_id=1&limit=50",
+              "host": ["{{base_url}}"],
+              "path": ["get_production"],
+              "query": [
+                { "key": "machine_id", "value": "1" },
+                { "key": "limit", "value": "50" },
+                { "key": "start_time", "value": "2025-01-01 00:00:00", "disabled": true },
+                { "key": "end_time", "value": "2025-01-31 23:59:59", "disabled": true },
+                { "key": "latest", "value": "1", "disabled": true }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Production Entries",
+      "item": [
+        {
+          "name": "Set Production Target",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"machine_id\": 1,\n  \"start_time\": \"2025-01-15 06:00:00\",\n  \"end_time\": \"2025-01-15 14:00:00\",\n  \"product_target\": 100\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/production/target", "host": ["{{base_url}}"], "path": ["api", "production", "target"] }
+          }
+        },
+        {
+          "name": "Get Production Entries",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{base_url}}/api/production/entries?machine_id=1&for_date=2025-01-15&page=1&limit=50",
+              "host": ["{{base_url}}"],
+              "path": ["api", "production", "entries"],
+              "query": [
+                { "key": "machine_id", "value": "1" },
+                { "key": "for_date", "value": "2025-01-15" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "50" },
+                { "key": "from_datetime", "value": "2025-01-15 00:00:00", "disabled": true },
+                { "key": "to_datetime", "value": "2025-01-15 23:59:59", "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Quality Counts",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": 1,\n  \"good_products\": 90,\n  \"bad_products\": 5,\n  \"production_done\": 95\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/production/entries/update-quality", "host": ["{{base_url}}"], "path": ["api", "production", "entries", "update-quality"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "MPF Files",
+      "item": [
+        {
+          "name": "Upload MPF File",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "id", "value": "1", "type": "text" },
+                { "key": "file", "type": "file", "src": "" }
+              ]
+            },
+            "url": { "raw": "{{base_url}}/api/machine-production/upload-mpf", "host": ["{{base_url}}"], "path": ["api", "machine-production", "upload-mpf"] }
+          }
+        },
+        {
+          "name": "Get MPF File Content",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{base_url}}/api/machine-production/mpf?mpf_path=uploads/mpf/program.mpf",
+              "host": ["{{base_url}}"],
+              "path": ["api", "machine-production", "mpf"],
+              "query": [{ "key": "mpf_path", "value": "uploads/mpf/program.mpf" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reports",
+      "item": [
+        {
+          "name": "OEE Report",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{base_url}}/reports/oee?from_date=2025-01-01&to_date=2025-01-31&machine_id=1",
+              "host": ["{{base_url}}"],
+              "path": ["reports", "oee"],
+              "query": [
+                { "key": "from_date", "value": "2025-01-01" },
+                { "key": "to_date", "value": "2025-01-31" },
+                { "key": "machine_id", "value": "1" },
+                { "key": "export", "value": "csv", "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Production Report",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{base_url}}/reports/production?from_date=2025-01-01&to_date=2025-01-31&machine_id=1&limit=100",
+              "host": ["{{base_url}}"],
+              "path": ["reports", "production"],
+              "query": [
+                { "key": "from_date", "value": "2025-01-01" },
+                { "key": "to_date", "value": "2025-01-31" },
+                { "key": "machine_id", "value": "1" },
+                { "key": "limit", "value": "100" },
+                { "key": "export", "value": "csv", "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Downtime Report",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{base_url}}/reports/downtime?from_date=2025-01-01&to_date=2025-01-31&machine_id=1",
+              "host": ["{{base_url}}"],
+              "path": ["reports", "downtime"],
+              "query": [
+                { "key": "from_date", "value": "2025-01-01" },
+                { "key": "to_date", "value": "2025-01-31" },
+                { "key": "machine_id", "value": "1" },
+                { "key": "limit", "value": "100" },
+                { "key": "export", "value": "csv", "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Energy Report",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{base_url}}/reports/energy?from_date=2025-01-01&to_date=2025-01-31&machine_id=1",
+              "host": ["{{base_url}}"],
+              "path": ["reports", "energy"],
+              "query": [
+                { "key": "from_date", "value": "2025-01-01" },
+                { "key": "to_date", "value": "2025-01-31" },
+                { "key": "machine_id", "value": "1" },
+                { "key": "export", "value": "csv", "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Breakdowns Report",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{base_url}}/reports/breakdowns?from_date=2025-01-01&to_date=2025-01-31&limit=100",
+              "host": ["{{base_url}}"],
+              "path": ["reports", "breakdowns"],
+              "query": [
+                { "key": "from_date", "value": "2025-01-01" },
+                { "key": "to_date", "value": "2025-01-31" },
+                { "key": "vfj_no", "value": "VFJ-001", "disabled": true },
+                { "key": "limit", "value": "100" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Metrics",
+      "item": [
+        {
+          "name": "MTBF & MTTR",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{base_url}}/metrics/mtbf-mttr?from_date=2025-01-01&to_date=2025-01-31&machine_id=1",
+              "host": ["{{base_url}}"],
+              "path": ["metrics", "mtbf-mttr"],
+              "query": [
+                { "key": "from_date", "value": "2025-01-01" },
+                { "key": "to_date", "value": "2025-01-31" },
+                { "key": "machine_id", "value": "1" },
+                { "key": "export", "value": "csv", "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "OEE Calculate",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{base_url}}/api/oee/calculate?start_date=2025-01-01&end_date=2025-01-31&machine_id=1&decimals=3",
+              "host": ["{{base_url}}"],
+              "path": ["api", "oee", "calculate"],
+              "query": [
+                { "key": "start_date", "value": "2025-01-01" },
+                { "key": "end_date", "value": "2025-01-31" },
+                { "key": "machine_id", "value": "1" },
+                { "key": "decimals", "value": "3" },
+                { "key": "ideal_cycle_time_seconds", "value": "150", "disabled": true },
+                { "key": "export", "value": "csv", "disabled": true }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Alerts",
+      "item": [
+        {
+          "name": "Get Alarms",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{base_url}}/api/alarms?machine_id=1&limit=50",
+              "host": ["{{base_url}}"],
+              "path": ["api", "alarms"],
+              "query": [
+                { "key": "machine_id", "value": "1" },
+                { "key": "limit", "value": "50" },
+                { "key": "from_date", "value": "2025-01-01", "disabled": true },
+                { "key": "to_date", "value": "2025-01-31", "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Warnings",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{base_url}}/api/warnings?machine_id=1&limit=50",
+              "host": ["{{base_url}}"],
+              "path": ["api", "warnings"],
+              "query": [
+                { "key": "machine_id", "value": "1" },
+                { "key": "limit", "value": "50" },
+                { "key": "from_date", "value": "2025-01-01", "disabled": true },
+                { "key": "to_date", "value": "2025-01-31", "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get All Alerts",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{base_url}}/api/alerts?machine_id=1&limit=50",
+              "host": ["{{base_url}}"],
+              "path": ["api", "alerts"],
+              "query": [
+                { "key": "machine_id", "value": "1" },
+                { "key": "limit", "value": "50" },
+                { "key": "from_datetime", "value": "2025-01-01 00:00:00", "disabled": true },
+                { "key": "to_datetime", "value": "2025-01-31 23:59:59", "disabled": true }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{base_url}}/health", "host": ["{{base_url}}"], "path": ["health"] }
+          }
+        }
+      ]
+    }
+  ]
+}
